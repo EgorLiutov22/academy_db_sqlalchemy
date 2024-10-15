@@ -9,6 +9,8 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
+from database import engine
+
 
 class Base(DeclarativeBase):
     pass
@@ -82,3 +84,6 @@ class Lection(Base):
     group: Mapped[List[Group]] = relationship(
         secondary=association_table, back_populates="lection"
     )
+
+
+Base.metadata.create_all(engine)
