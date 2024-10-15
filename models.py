@@ -5,6 +5,7 @@ from sqlalchemy import Table
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase
+# from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -47,8 +48,8 @@ class Faculty(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     finances: Mapped[float]
     name: Mapped[str]
-    faculty_id: Mapped[int] = mapped_column(ForeignKey("faculty.id"))
-    faculty: Mapped["Faculty"] = relationship(back_populates="departments")
+    department_id: Mapped[int] = mapped_column(ForeignKey("faculty.id"))
+    department: Mapped["Departments"] = relationship(back_populates="faculty")
 
     departments: Mapped[List["Departments"]] = relationship(
         back_populates="faculty", cascade="all, delete-orphan"
@@ -71,7 +72,7 @@ class Group(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     finances: Mapped[float]
     year: Mapped[int]
-    department_id: Mapped[int] = mapped_column(ForeignKey("department.id"))
+    department_id: Mapped[int] = mapped_column(ForeignKey("departments.id"))
     department: Mapped["Faculty"] = relationship(back_populates="groups")
 
 
