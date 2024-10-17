@@ -56,7 +56,7 @@ class Faculty(Base):
     __tablename__ = "faculty"
     id: Mapped[int] = mapped_column(primary_key=True)
     finances: Mapped[float]
-    name: Mapped[str]
+    name: Mapped[str] = mapped_column(unique=True)
     departments: Mapped[List["Departments"]] = relationship(back_populates="faculty")
     # department_id: Mapped[int] = mapped_column(ForeignKey("departments.id"))
     # department: Mapped["Departments"] = relationship(back_populates="faculty")
