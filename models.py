@@ -39,6 +39,15 @@ class Departments(Base):
     faculty_id: Mapped[int] = mapped_column(ForeignKey("faculty.id"))
     faculty: Mapped["Faculty"] = relationship(back_populates="departments")
 
+    # group: Mapped[List["Group"]] = relationship(back_populates="departments")
+
+    # group_id: Mapped[int] = mapped_column(ForeignKey("group.id"))
+
+
+    # groups: Mapped[List["Group"]] = relationship(
+    #     back_populates="departments", cascade="all, delete-orphan"
+    # )
+
     def __repr__(self) -> str:
         return f"Address(id={self.id!r}, email_address={self.name!r})"
 
@@ -48,43 +57,45 @@ class Faculty(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     finances: Mapped[float]
     name: Mapped[str]
-    department_id: Mapped[int] = mapped_column(ForeignKey("faculty.id"))
-    department: Mapped["Departments"] = relationship(back_populates="faculty")
+    departments: Mapped[List["Departments"]] = relationship(back_populates="faculty")
+    # department_id: Mapped[int] = mapped_column(ForeignKey("departments.id"))
+    # department: Mapped["Departments"] = relationship(back_populates="faculty")
 
-    departments: Mapped[List["Departments"]] = relationship(
-        back_populates="faculty", cascade="all, delete-orphan"
-    )
+    # departments: Mapped[List["Departments"]] = relationship(
+    #     back_populates="faculty", cascade="all, delete-orphan"
+    # )
 
     def __repr__(self) -> str:
         return f"Address(id={self.id!r}, email_address={self.name!r})"
 
 
-association_table = Table(
-    "association_table",
-    Base.metadata,
-    Column("group_id", ForeignKey("groups.id")),
-    Column("lection_id", ForeignKey("lections.id")),
-)
+# association_table = Table(
+#     "association_table",
+#     Base.metadata,
+#     Column("group_id", ForeignKey("group.id")),
+#     Column("lection_id", ForeignKey("lections.id")),
+# )
+#
+#
+# class Group(Base):
+#     __tablename__ = "group"
+#     id: Mapped[int] = mapped_column(primary_key=True)
+#     finances: Mapped[float]
+#     year: Mapped[int]
+    # department_id: Mapped[int] = mapped_column(ForeignKey("departments.id"))
+    # department: Mapped["Departments"] = relationship(back_populates="groups")
+    # department_id: Mapped[int] = mapped_column(ForeignKey("departments.id"))
+    # departments: Mapped["Departments"] = relationship("departments", back_populates="group")
 
+#
+# class Lection(Base):
+#     __tablename__ = "lections"
+#     id: Mapped[int] = mapped_column(primary_key=True)
+#     subject: Mapped[str]
+#     cabinet: Mapped[int]
+#     group: Mapped[List[Group]] = relationship(
+#         secondary=association_table, back_populates="lection"
+#     )
 
-class Group(Base):
-    __tablename__ = "groups"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    finances: Mapped[float]
-    year: Mapped[int]
-    department_id: Mapped[int] = mapped_column(ForeignKey("departments.id"))
-    department: Mapped["Faculty"] = relationship(back_populates="groups")
-
-
-
-class Lection(Base):
-    __tablename__ = "lections"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    subject: Mapped[str]
-    cabinet: Mapped[int]
-    group: Mapped[List[Group]] = relationship(
-        secondary=association_table, back_populates="lection"
-    )
-
-
-Base.metadata.create_all(engine)
+if __name__ == '__main__':
+    Base.metadata.create_all(engine)

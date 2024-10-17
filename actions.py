@@ -1,6 +1,7 @@
 from flask import Flask
 
-from models import Faculty
+import models
+from models import Faculty, Departments
 from database import session
 
 app = Flask(__name__)
@@ -14,5 +15,6 @@ def add_faculty(name, finances):
     f = Faculty(name=name, finances=finances)
     session.add(f)
     session.commit()
+    return f'faculty {name} added'
 
 
